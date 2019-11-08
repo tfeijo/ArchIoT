@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/jogoteca.iml" filepath="$PROJECT_DIR$/.idea/jogoteca.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../kafka_consumer/.idea/kafka_consumer.iml" filepath="$PROJECT_DIR$/../kafka_consumer/.idea/kafka_consumer.iml" />
     </modules>
   </component>
 </project>

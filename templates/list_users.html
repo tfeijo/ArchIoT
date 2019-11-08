@@ -1,0 +1,26 @@
+{% extends "template.html" %}
+{% block conteudo %}
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+
+                    <th scope="col">Nome</th>
+                    <th scope="col">Login</th>
+                    <th scope="col">Group</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.login }}</td>
+                        <td>{{ user.group}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}
