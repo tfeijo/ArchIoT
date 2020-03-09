@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 from flask_paginate import Pagination, get_page_parameter
 from models import User, Group
 from kafka import KafkaConsumer
-from flask import Flask, render_template, request, redirect, session, flash, url_for
+from flask import Flask, render_template, request, redirect, session, flash, url_for, jsonify
 
 app = Flask(__name__)
 app.secret_key = '123'
@@ -12,20 +12,20 @@ KAFKA_TOPIC = 'Siafu-Office'
 
 groups: Dict[str, Group] = {}
 
-group = Group('dev1', ['entityID', 'time', 'Activity'], [])
+group = Group('datagroup 1', ['entityID', 'time', 'Activity'], [])
 groups[group.name] = group
-group = Group('dev2', ['entityID', 'time', 'position'], [])
+group = Group('datagroup 2', ['entityID', 'time', 'position'], [])
 groups[group.name] = group
 
 users: Dict[str, User] = {}
-user = User('Thiago Feijó', 'tfeijo', '123', 'dev1')
+user = User('Thiago Feijó', 'tfeijo', '123', 'datagroup 1')
 users[user.login] = user
 
-groups['dev1'].list_user.append(user.name)
+groups['datagroup 1'].list_user.append(user.name)
 
-user = User('Nedson', 'nedson', '123', 'dev2')
+user = User('Nedson Soares', 'nedson', '123', 'datagroup 2')
 users[user.login] = user
-groups['dev2'].list_user.append(user.name)
+groups['datagroup 2'].list_user.append(user.name)
 
 
 def kafka_consult(parsed_topic_name):
@@ -106,6 +106,17 @@ def index():
                                pagination=pagination,
                                list_key=list_key)
 
+@app.route('/agents', methods=['GET'])
+def rest_api():
+
+        list_agent = kafka_consult(KAFKA_TOPIC)
+
+        #login = session['usuario_logado']
+        #group = users[login].group
+
+        #list_key = groups[group].list_key
+
+        return jsonify(list_agent)
 
 @app.route('/new-user')
 def new_user():
@@ -202,7 +213,10 @@ def create_group():
 
 @app.route('/login')
 def login():
-    return render_template('login.html')
+    if is_logged():
+        return redirect(url_for('index'))
+    else:
+        return render_template('login.html')
 
 
 @app.route('/logout')
